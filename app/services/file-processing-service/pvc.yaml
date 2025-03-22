@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: file-processing-storage
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: file-processing-storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: longhorn 

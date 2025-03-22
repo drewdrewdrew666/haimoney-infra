@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: de-backend-service
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: de-backend-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: de-backend-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: de-backend-service
+    spec:
+      containers:
+      - name: de-backend-service
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/de-backend-service:v0.0.15
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+          protocol: TCP
+        env:
+        - name: DSN
+          value: host=de-file-db port=5432 user=postgres password=postgres dbname=de_file_entries sslmode=disable timezone=UTC connect_timeout=5
+        - name: FILE_DIRECTORY
+          value: /data/files/
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: service.name=de-backend,service.version=0.1.0
+        volumeMounts:
+        - mountPath: /data/files
+          name: de-file-storage
+        - mountPath: /app-logs
+          name: app-log-directory
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: de-file-storage
+        persistentVolumeClaim:
+          claimName: de-file-storage
+      - emptyDir: {}
+        name: app-log-directory 

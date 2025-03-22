@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-queue
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: event-queue
+spec:
+  ports:
+  - name: "5672"
+    port: 5672
+    targetPort: 5672
+    protocol: TCP
+  - name: "15672"
+    port: 15672
+    targetPort: 15672
+    protocol: TCP
+  selector:
+    io.kompose.service: event-queue 

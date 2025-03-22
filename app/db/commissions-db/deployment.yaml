@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commissions-db
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: commissions-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: apps-haimoney-staging
+      io.kompose.service: commissions-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: apps-haimoney-staging
+        io.kompose.service: commissions-db
+    spec:
+      containers:
+        - name: commissions-db
+          image: postgres:13
+          env:
+            - name: POSTGRES_DB
+              value: "commissions"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data2
+              name: commissions-db-data
+      volumes:
+        - name: commissions-db-data
+          persistentVolumeClaim:
+            claimName: commissions-db-data 

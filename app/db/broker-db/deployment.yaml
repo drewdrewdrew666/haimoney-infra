@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker-db
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: broker-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: broker-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: broker-db
+    spec:
+      containers:
+        - name: broker-db
+          image: postgres:13
+          env:
+            - name: POSTGRES_DB
+              value: broker
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: broker-service-data
+              subPath: data
+            - mountPath: /app-logs
+              name: app-log-directory
+      volumes:
+        - name: broker-service-data
+          persistentVolumeClaim:
+            claimName: broker-service-data
+        - emptyDir: {}
+          name: app-log-directory 

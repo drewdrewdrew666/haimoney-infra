@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-service
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: profile-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: profile-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: profile-service
+    spec:
+      containers:
+      - name: profile-service
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/profile-service:v0.0.33
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+          protocol: TCP
+        env:
+        - name: AMQP_URI
+          value: amqp://guest:guest@event-queue:5672/
+        - name: DB_HOST
+          value: profile-db
+        - name: DB_NAME
+          value: profiles
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_PW
+          value: postgres
+        - name: DB_USER
+          value: postgres
+        - name: SUBSCRIBER_TOPIC
+          value: profile.any
+        volumeMounts:
+        - mountPath: /app-logs
+          name: app-log-directory
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - emptyDir: {}
+        name: app-log-directory 

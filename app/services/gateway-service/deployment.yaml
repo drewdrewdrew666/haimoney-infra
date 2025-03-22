@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: gateway-service
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      io.kompose.service: gateway-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: gateway-service
+    spec:
+      containers:
+      - name: gateway-service
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/gateway-service:v0.0.15
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: AMQP_URI
+          value: amqp://guest:guest@event-queue:5672/
+        - name: API_LISTEN_ADDR
+          value: :8080
+        - name: AUTH_RPC_SERVER
+          value: auth-service:5002
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: '"service.name=gateway,service.version=0.1.0"'
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: jwt-secret
+              name: jwt-secret-key
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app-logs
+          name: app-log-directory
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - emptyDir: {}
+        name: app-log-directory 

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: next-auth-url-config
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+data:
+  next-auth-url: https://haimoneytest1.greentrial.com.au:443

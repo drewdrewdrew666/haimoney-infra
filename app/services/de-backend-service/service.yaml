@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: de-backend-service
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: de-backend-service
+spec:
+  ports:
+  - name: "5001"
+    port: 5001
+    targetPort: 5001
+    protocol: TCP
+  selector:
+    io.kompose.service: de-backend-service 
