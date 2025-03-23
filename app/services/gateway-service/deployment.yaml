@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: gateway-service
-        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/gateway-service:v0.0.15
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/gateway-service:v0.0.16
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5001
@@ -46,6 +46,32 @@ spec:
             secretKeyRef:
               key: jwt-secret
               name: jwt-secret-key
+        - name: BROKER_SERVICE_RPC
+          value: broker-service:5001
+        - name: DE_BACKEND_SERVICE_RPC
+          value: de-backend-service:5001
+        - name: DE_BACKEND_SERVICE_HTTP
+          value: de-backend-service:5001
+        - name: FILE_PROCESSING_SERVICE_RPC
+          value: file-processing-service:5001
+        - name: MAIL_SERVICE_RPC
+          value: mail-service:5001
+        - name: PROFILE_SERVICE_RPC
+          value: profile-service:5001
+        - name: RCTI_WORKER_SERVICE_RPC
+          value: rcti-worker-service:5010
+        - name: AUTH_SERVICE_RPC
+          value: auth-service:5001
+        - name: LOAN_SERVICE_RPC
+          value: loan-service:5001
+        - name: NEXT_FRONTEND_RPC
+          value: frontend-service:443
+        - name: RCTI_BACKEND_SERVICE_RPC
+          value: rcti-backend-service:5001
+        - name: RCTI_BACKEND_SERVICE_HTTP
+          value: rcti-backend-service:5001
+        - name: LOG_DIR
+          value: /app-logs
         resources:
           requests:
             cpu: 100m
