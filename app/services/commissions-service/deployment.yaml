@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commissions-service
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: commissions-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: commissions-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: commissions-service
+    spec:
+      containers:
+      - name: commissions-service
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/commissions-service:v0.0.38
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5001
+          protocol: TCP
+        env:
+        - name: AMQP_URI
+          value: amqp://guest:guest@event-queue:5672/
+        - name: DB_HOST
+          value: commissions-db
+        - name: DB_NAME
+          value: commissions
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_PW
+          value: postgres
+        - name: DB_USER
+          value: postgres
+        - name: SUBSCRIBER_TOPIC
+          value: commissions.any
+        volumeMounts:
+        - mountPath: /app-logs
+          name: app-log-directory
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - emptyDir: {}
+        name: app-log-directory 

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: commissions-service
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: commissions-service
+spec:
+  ports:
+  - name: "5001"
+    port: 5001
+    protocol: TCP
+    targetPort: 5001
+  selector:
+    io.kompose.service: commissions-service
+  type: ClusterIP 

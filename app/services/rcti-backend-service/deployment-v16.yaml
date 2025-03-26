@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rcti-backend-service
+  namespace: default
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-staging
+    io.kompose.service: rcti-backend-service
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      io.kompose.service: rcti-backend-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: rcti-backend-service
+    spec:
+      containers:
+      - name: rcti-backend-service
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/rcti-backend-service:v0.0.16
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        env:
+        - name: AMQP_URI
+          value: amqp://guest:guest@event-queue:5672/
+        - name: DB_HOST
+          value: rcti-file-db
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: postgres
+        - name: DB_PASSWORD
+          value: postgres
+        - name: FILE_DIRECTORY
+          value: /data/files/
+        - name: LOG_DIR
+          value: /app-logs
+        - name: BROKER_SERVICE_RPC
+          value: broker-service:5001
+        - name: DE_BACKEND_SERVICE_RPC
+          value: de-backend-service:5001
+        - name: DE_BACKEND_SERVICE_HTTP
+          value: de-backend-service:5001
+        - name: FILE_PROCESSING_SERVICE_RPC
+          value: file-processing-service:5001
+        - name: MAIL_SERVICE_RPC
+          value: mail-service:5001
+        - name: PROFILE_SERVICE_RPC
+          value: profile-service:5001
+        - name: RCTI_WORKER_SERVICE_RPC
+          value: rcti-worker-service:5010
+        - name: AUTH_SERVICE_RPC
+          value: auth-service:5001
+        - name: LOAN_SERVICE_RPC
+          value: loan-service:5001
+        - name: NEXT_FRONTEND_RPC
+          value: frontend-service:443
+        - name: RCTI_BACKEND_SERVICE_RPC
+          value: rcti-backend-service:5001
+        - name: RCTI_BACKEND_SERVICE_HTTP
+          value: rcti-backend-service:5001
+        - name: RPC_SERVICE_PORT
+          value: "5001"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data/files
+          name: rcti-file-storage
+        - mountPath: /app-logs
+          name: app-log-directory
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: rcti-file-storage
+        persistentVolumeClaim:
+          claimName: rcti-file-storage
+      - emptyDir: {}
+        name: app-log-directory 
