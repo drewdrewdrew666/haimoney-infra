@@ -1,0 +1,13 @@
+{
+    "registryId": "324037285736",
+    "repositoryName": "haimoney/mail-service",
+    "imageDigest": "sha256:f12f3bd979b7b4aca0928f9d660cbaac825d91b292ce098389f5ee7b6eab403a",
+    "imageTags": [
+        "v0.0.15"
+    ],
+    "imageSizeInBytes": 8593508,
+    "imagePushedAt": "2024-11-26T09:36:21.007000+11:00",
+    "imageManifestMediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "artifactMediaType": "application/vnd.docker.container.image.v1+json",
+    "lastRecordedPullTime": "2025-03-19T22:21:32.958000+11:00"
+}

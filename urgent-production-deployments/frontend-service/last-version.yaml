@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "57"
+    kompose.cmd: kompose convert -o kube/manifests
+    kompose.version: 1.34.0 (cbf2835db)
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert -o kube/manifests","kompose.version":"1.34.0 (cbf2835db)"},"labels":{"app.kubernetes.io/instance":"apps-haimoney-prod","io.kompose.service":"frontend-service"},"name":"frontend-service","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"frontend-service"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert -o kube/manifests","kompose.version":"1.34.0 (cbf2835db)"},"labels":{"io.kompose.service":"frontend-service"}},"spec":{"containers":[{"env":[{"name":"AUTH_SECRET","valueFrom":{"secretKeyRef":{"key":"jwt-secret","name":"jwt-secret-key"}}},{"name":"NEXTAUTH_URL","valueFrom":{"configMapKeyRef":{"key":"next-auth-url","name":"next-auth-url-config"}}}],"image":"324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/frontend-service:v0.0.13","imagePullPolicy":"IfNotPresent","name":"frontend-service","ports":[{"containerPort":80,"protocol":"TCP"}]}],"imagePullSecrets":[{"name":"regcred"}],"restartPolicy":"Always"}}}}
+  creationTimestamp: "2024-11-21T11:05:06Z"
+  generation: 57
+  labels:
+    app.kubernetes.io/instance: apps-haimoney-prod
+    io.kompose.service: frontend-service
+  name: frontend-service
+  namespace: default
+  resourceVersion: "17171127"
+  uid: 47e86790-5ce6-4439-8f27-2a39e1ce5444
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      io.kompose.service: frontend-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -o kube/manifests
+        kompose.version: 1.34.0 (cbf2835db)
+        kubectl.kubernetes.io/restartedAt: "2024-12-03T11:09:42Z"
+      creationTimestamp: null
+      labels:
+        io.kompose.service: frontend-service
+    spec:
+      containers:
+      - env:
+        - name: AUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: jwt-secret
+              name: jwt-secret-key
+        - name: NEXTAUTH_URL
+          valueFrom:
+            configMapKeyRef:
+              key: next-auth-url
+              name: next-auth-url-config
+        - name: PORT
+          value: "3000"
+        - name: NEXT_PUBLIC_APP_RELEASE_VERSION
+          value: v0.0.39
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/frontend-service:v0.0.39
+        imagePullPolicy: IfNotPresent
+        name: frontend-service
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: regcred
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2024-11-21T11:05:06Z"
+    lastUpdateTime: "2025-03-02T23:55:34Z"
+    message: ReplicaSet "frontend-service-cf94545cb" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2025-03-04T19:26:58Z"
+    lastUpdateTime: "2025-03-04T19:26:58Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 57
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

@@ -1,0 +1,13 @@
+{
+    "registryId": "324037285736",
+    "repositoryName": "haimoney/rcti-worker-service",
+    "imageDigest": "sha256:a3b114c4415b02b3be4e715b5a02377308cc998da9609b53c360351025167a41",
+    "imageTags": [
+        "v0.0.16"
+    ],
+    "imageSizeInBytes": 11049490,
+    "imagePushedAt": "2024-11-26T15:43:47.226000+11:00",
+    "imageManifestMediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "artifactMediaType": "application/vnd.docker.container.image.v1+json",
+    "lastRecordedPullTime": "2025-03-19T22:30:55.355000+11:00"
+}

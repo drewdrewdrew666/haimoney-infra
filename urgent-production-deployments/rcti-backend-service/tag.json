@@ -1,0 +1,13 @@
+{
+    "registryId": "324037285736",
+    "repositoryName": "haimoney/rcti-backend-service",
+    "imageDigest": "sha256:cb640ac4a6110fa46e4ee6647033516915f5c8204545b4068aaab59495cc435c",
+    "imageTags": [
+        "v0.0.15"
+    ],
+    "imageSizeInBytes": 10816399,
+    "imagePushedAt": "2024-11-26T09:36:12.733000+11:00",
+    "imageManifestMediaType": "application/vnd.docker.distribution.manifest.v2+json",
+    "artifactMediaType": "application/vnd.docker.container.image.v1+json",
+    "lastRecordedPullTime": "2025-03-21T13:43:46.114000+11:00"
+}
