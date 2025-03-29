@@ -1,0 +1,1 @@
+export KUBECONFIG=./connection-file/haimoney-commissions-cluster-PROD-kubeconfig.yaml && kubectl patch configmap next-auth-url-config -n default --patch '{"data": {"next-auth-url": "https://commissions.haimoney.com.au"}}'

@@ -37,7 +37,7 @@ spec:
           value: "3000"
         - name: NEXT_PUBLIC_APP_RELEASE_VERSION
           value: v0.0.39
-        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/frontend-service:v0.0.39
+        image: 324037285736.dkr.ecr.ap-southeast-2.amazonaws.com/haimoney/frontend-service:v0.1.2
         imagePullPolicy: IfNotPresent
         name: frontend-service
         ports:
